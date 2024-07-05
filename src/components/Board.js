@@ -1,12 +1,21 @@
 import React from 'react';
 import { useKanban } from '../context/KanbanContext';
+import { Column } from './Column'
 
 export const Board = () => {
     
-    console.log(useKanban())
-    return (<div>
-     
-    </div>)
+    const {columns} = useKanban();
+    
+    
+    return (
+        <div>
+            {
+                columns.map(column =>
+                    <Column column={column}/>
+                )
+            }
+        </div>
+    )
 }
 
 export default Board;
