@@ -10,7 +10,7 @@ export const Board = () => {
     let conunt = 0;
     return (
         <DragDropContext>
-            <Droppable>
+            <Droppable droppableId='columns'>
                 {(provide) => (
                     <div  ref={provide.innerRef} {...provide.droppableProps}>
                         {
@@ -18,8 +18,10 @@ export const Board = () => {
                                 conunt+=1;
                                 return (
 
-                                    <Draggable>
-                                        <Column column={column} key={conunt}/>
+                                    <Draggable draggableId={`Draggale-id-${conunt}`} index={conunt}>
+                                        {(provider) =>(
+                                        <Column column={column} key={conunt} ref={provider.innerRef} {...provider.dragHandleProps} {...provider.draggableProps}/>
+                            )}
                                     </Draggable>
 
                                 )
