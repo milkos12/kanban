@@ -6,34 +6,42 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 export const Board = () => {
 
     const { columns } = useKanban();
+    const handleDragEnd = () => {
+
+    }
 
     let conunt = 0;
     return (
-        <DragDropContext>
+        <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId='columns'>
                 {(provide) => (
-                    <div  ref={provide.innerRef} {...provide.droppableProps}>
+                    <div ref={provide.innerRef} {...provide.droppableProps}>
                         {
-                            columns.map(column => {
-                                conunt+=1;
-                                return (
+                            columns.map((column, index) =>{
+                               
+                               return (<Draggable draggableId={`Draggale-id-${index}`} index={index}>
+                                    {(provider) => (
+                                        <div key={conunt} ref={provider.innerRef} {...provider.dragHandleProps} {...provider.draggableProps} >
+                                            <Column column={column} />
+                                        </div>
+                                        
+                                    )}
+                                </Draggable>)
+                            }  
 
-                                    <Draggable draggableId={`Draggale-id-${conunt}`} index={conunt}>
-                                        {(provider) =>(
-                                        <Column column={column} key={conunt} ref={provider.innerRef} {...provider.dragHandleProps} {...provider.draggableProps}/>
+                                
+                                
+                                
+
+
+
+
                             )}
-                                    </Draggable>
-
-                                )
-                            }
-
-                            )
-                        }
                         {provide.placeholder}
                     </div>
                 )}
             </Droppable>
-        </DragDropContext>
+        </DragDropContext >
 
     )
 }
