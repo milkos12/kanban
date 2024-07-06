@@ -2,7 +2,7 @@ import React from "react";
 import { useSortable } from "@dnd-kit/sortable"; 
 import { CSS } from "@dnd-kit/utilities";
 
-export const Column = ({ column }) => {
+export const Column = ({ item }) => {
     
     const {
         attributes,
@@ -10,20 +10,18 @@ export const Column = ({ column }) => {
         setNodeRef,
         transform,
         transition,
-      } = useSortable({id: column.id});
+      } = useSortable({id: item.id});
       const style = {
         transform: CSS.Transform.toString(transform),
         transition,
       };
 
-      console.log("######")
-    
     return (
 
         <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            <h2>{column.title}</h2>
+            <h2>{item.description}</h2>
             <div >
-                <p>content columns</p>
+                <p>content </p>
             </div>
         </div>
 
