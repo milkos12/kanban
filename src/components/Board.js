@@ -1,51 +1,54 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useKanban } from '../context/KanbanContext';
 import { Column } from './Column'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { DndContext, closestCorners , useSensors, useSensor, KeyboardSensor, closestCenter} from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import { PointerSensor } from '@dnd-kit/core';
+
 
 export const Board = () => {
 
     const { columns } = useKanban();
-    const handleDragEnd = () => {
+    const [items, setItems] = useState([1, 2, 3]);
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+          coordinateGetter: sortableKeyboardCoordinates,
+        })
+      );
+    
+      function handleDragEnd(event) {
+        /*const {active, over} = event;
+        
+        if (active.id !== over.id) {
+          setItems((items) => {
+            const oldIndex = items.indexOf(active.id);
+            const newIndex = items.indexOf(over.id);
+            
+            return arrayMove(items, oldIndex, newIndex);
+          });
+        }*/
+      }
 
-    }
+      console.log(columns)
 
-    let conunt = 0;
     return (
-        <DragDropContext onDragEnd={handleDragEnd}>
-            <Droppable droppableId='columns'>
-                {(provide) => (
-                    <div ref={provide.innerRef} {...provide.droppableProps}>
+        <div>
+            <DndContext collisionDetection={closestCenter} sensors={sensors} onDragEnd={handleDragEnd}>
+               
+                    <SortableContext items={items} strategy={verticalListSortingStrategy}>
                         {
-                            columns.map((column, index) =>{
-                               
-                               return (<Draggable draggableId={`Draggale-id-${index}`} index={index}>
-                                    {(provider) => (
-                                        <div key={conunt} ref={provider.innerRef} {...provider.dragHandleProps} {...provider.draggableProps} >
-                                            <Column column={column} />
-                                        </div>
-                                        
-                                    )}
-                                </Draggable>)
-                            }  
+                            columns.map((column, index) =>
+                                <Column column={column} key={column.id} id={index}/>
 
-                                
-                                
-                                
-
-
-
-
-                            )}
-                        {provide.placeholder}
-                    </div>
-                )}
-            </Droppable>
-        </DragDropContext >
-
+                            )
+                        }
+                    </SortableContext>
+               
+            </DndContext>
+        </div>
     )
 }
-
 export default Board;
 
 

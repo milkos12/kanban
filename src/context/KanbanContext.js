@@ -2,9 +2,9 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 
 
 const columns = [
-    {title:"to do"},
-    {title:"in process"},
-    {title:"done"},
+    {id:1,title:"to do"},
+    {id:2,title:"in process"},
+    {id:3,title:"done"},
 ]
 
 const kanbanContext = createContext();
