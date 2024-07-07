@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useKanban } from '../context/KanbanContext';
 import { Column } from './Column'
+import { PutDroppoble } from './DroppobleColumn'
 import { DndContext, DragOverlay, useSensors, useSensor, KeyboardSensor, closestCenter, useDroppable } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
 import { PointerSensor } from '@dnd-kit/core';
 import './Board.css'
 
@@ -19,26 +20,43 @@ export const Board = () => {
         })
     );
 
-    
+
 
     //this function change the state column from app an put
     //the new postion for the item dragged
     function handleDragEnd(event) {
         const { active, over } = event;
+
         if (!over) return;
-        
-        //search in witch column is the items active and over
+        //search in witch column is the items active
         const searchIndexColumn = (itemId) => {
-            return columns.findIndex(column => column.items.some(item => item.id === itemId));
+            return columns.findIndex(column => {
+             
+                return column.items.some(item => item.id === itemId)});
         };
 
+        //search in witch column is the items active 
+        //if the columns is different the variable over
+        //contein the objecj with data about column not items
+        const searchIndexColumnOVER = (itemId) => {
+            return columns.findIndex((column, index) => {
+                
+                if(over.data.current.type === "empty" && index == over.data.current.index)
+                    return true
+                if(column.items)
+                return column.items.some(item => item.id === itemId)})
+            }
+                
+       
+
         const activeColumnIndex = searchIndexColumn(active.id);
-        const overColumnIndex = searchIndexColumn(over.id);
+        const overColumnIndex = searchIndexColumnOVER(over.id);
+
 
         //search index from element into columns 
         const activeItemIndex = columns[activeColumnIndex].items.findIndex(item => item.id === active.id);
         const overItemIndex = columns[overColumnIndex].items.findIndex(item => item.id === over.id);
-
+        
         const activeItem = columns[activeColumnIndex].items[activeItemIndex];
         const updatedColumns = [...columns];
 
@@ -52,8 +70,8 @@ export const Board = () => {
 
 
     const onDragStartFuntion = (event) => {
-        
-        const typeActive = event.active.data.current.sortable.index = 7;
+        console.log(columns)
+        const typeActive = event.active.data.current.sortable.index;
 
         if (typeActive == "itme") {
             setItemActive(typeActive);
@@ -63,9 +81,10 @@ export const Board = () => {
     }
 
     const onOver = (event) => {
-     
+
 
     }
+
 
 
 
@@ -79,24 +98,26 @@ export const Board = () => {
                         <SortableContext items={itmesALL} strategy={verticalListSortingStrategy}>
                             {
                                 columns.map((column, index) =>
-                                    <div id={`column-${index}`} key={`column-${index}`}>
+                                    <PutDroppoble id={`id-dropp-${index}`} key={`droppable-${index}`} index={index} column={column}>
+                                        <div id={`column-${index}`} key={`column-${index}`} className='each-column' >
 
-                                        {
+                                            {
+                                               
+                                                column.items.map(item => {
 
-                                            column.items.map(item => {
+                                                    return <Column item={item} key={item.id} id={item.id} columId={`column-${index}`} />
 
-                                                return <Column item={item} key={item.id} id={item.id} columId={`column-${index}`} />
+                                                })
 
-                                            })
+                                            }
 
-                                        }
-
-
+                                    
                                     </div>
+                                    </PutDroppoble>
                                 )
                             }
-                        </SortableContext>
-                    </div>
+            </SortableContext>
+        </div>
 
 
 
@@ -105,15 +126,15 @@ export const Board = () => {
                 }
 
 
-            </DndContext>
-            <DragOverlay>
-                {itemActive && (
+            </DndContext >
+    <DragOverlay>
+        {itemActive && (
 
-                    <Column item={dataAcitve} />
+            <Column item={dataAcitve} />
 
-                )}
-            </DragOverlay>
-        </div>
+        )}
+    </DragOverlay>
+        </div >
     )
 }
 export default Board;

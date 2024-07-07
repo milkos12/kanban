@@ -22,7 +22,7 @@ export const Column = ({ item, columId }) => {
     if(isDragging) {
         return(<div >
             {
-                <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+                <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="itemHight">
                     <h2>grad elemnt</h2>
                     <div>
                         <p>grad elemnt</p>
@@ -36,7 +36,7 @@ export const Column = ({ item, columId }) => {
     return (
         <div >
             {
-                <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+                <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="itemHight">
                     <h2>{item.description}</h2>
                     <div >
                         <p>content </p>

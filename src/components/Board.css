@@ -1,9 +1,20 @@
 .boardCss {
     display: grid;
     grid-template-columns: auto auto auto;
+    column-gap: 30px;
 }
 
 .columns {
     display: grid;
 }
 
+.itemHight {
+    min-height: 100px;
+    background-color: aquamarine;
+}
+
+
+.each-column {
+    min-height: 500px;
+    background-color: bisque;
+}
