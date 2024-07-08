@@ -1,16 +1,18 @@
 import { useDroppable } from "@dnd-kit/core"
+import "./Board.css"
 
 
-export const PutDroppoble = ({id, index, children, column}) => {
+export const PutDroppoble = ({id, index, children, column, idOrigin}) => {
     const {setNodeRef} = useDroppable({
         id: id,
         data: {
           index: index,
-          type: 'empty'
+          type: `column`,
+          idOrigin
         },
       })
     return (
-        <div ref={setNodeRef} column={column}>
+        <div ref={setNodeRef} column={column} className="purtDroppable">
             {children}
         </div>
     )

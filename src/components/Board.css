@@ -6,15 +6,26 @@
 
 .columns {
     display: grid;
+    background-color: bisque;
 }
 
 .itemHight {
     min-height: 100px;
+    width: 100px;
     background-color: aquamarine;
 }
 
 
 .each-column {
-    min-height: 500px;
+ 
     background-color: bisque;
+}
+
+.dragg {
+    background-color: blue;
+    width: 100px;
+}
+
+.purtDroppable {
+    background-color: blueviolet;
 }
