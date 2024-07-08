@@ -11,7 +11,7 @@ import './Board.css'
 export const Board = () => {
     const { columns, setColumns } = useKanban();
     const [itemActive, setItemActive] = useState(null);
-    const [dataAcitve, setDataActive] = useState(null);
+    const [enter, setEnter] = useState(false);
     const sensors = useSensors(
         useSensor(PointerSensor),
         useSensor(KeyboardSensor, {
@@ -25,11 +25,10 @@ export const Board = () => {
     //the new postion for the item dragged
     function handleDragEnd(event) {
         const { active, over } = event;
-        console.log("'''''''''''''''''''' -> ", over)
+
         if (!over) return;
-
-
-
+        //if the 'over' is a column, return because the change is already done in the handleDragMove function
+        if (over.data.current.type === "column") return;
 
 
         //search in witch column is the items active
@@ -76,50 +75,40 @@ export const Board = () => {
 
 
     const onDragStartFuntion = (event) => {
-        console.log("------------->", event.active)
+        //this state change activate the DragOverlay
         setItemActive(event.active.data)
     }
 
-    const onOver = (event) => {
 
 
 
-    }
-
-    const faindADNreplaceOVER = (column) => {
-
-    }
-
-    const [enter, setEnter] = useState(false);
-    const [enterColumn, setEnterColumn] = useState(false);
-
-    // This function allows updating the position of the items 
-    // when they change position and enables moving items between columns
+    //this function allows updating the position of the items 
+    //when they change position and enables moving items between columns
     const handleDragMove = (event) => {
         const { active, over } = event;
 
-        // Extract information from the event
-        // In this case, get the dataItem and columnId
-        // This information was added when creating the items
-        const originColumnId = active.data.current.columnId;
+        //extract information from the event
+        //in this case, get the dataItem and columnId
+        //this information was added when creating the items
+        const originColumnId = active.data.current.columId;
         const itemToMove = active.data.current.dataItem;
-        const destinationColumnId = over.data.current.columnId;
+        const destinationColumnId = over.data.current.columId;
+
 
         //in some cases, columns can be empty 
         //this function handles the behavior because the 'over' 
-        // element from the event changes
+        //element from the event changes
         if (over.data.current.type === "column") {
             const destinationColumnIndex = over.data.current.index;
-
-            //this condition prevents duplicating the items 
-            //because this function runs many times
             const isDifferentColumn = over.data.current.idOrigin !== originColumnId;
 
+            //this condition prevents duplicating the items 
+            //ecause this function runs many times
             if (columns[destinationColumnIndex].items.length === 0 && isDifferentColumn && !enter) {
-                //move item to empty destination column
+                // Move item to empty destination column
                 columns[destinationColumnIndex].items.push(itemToMove);
 
-                //remove item from the origin column
+                // Remove item from the origin column
                 const originColumnIndex = columns.findIndex(column => column.id === originColumnId);
                 const originItems = [...columns[originColumnIndex].items];
                 const itemIndex = originItems.indexOf(itemToMove);
@@ -128,10 +117,9 @@ export const Board = () => {
                     originItems.splice(itemIndex, 1);
                 }
 
-                columns[originColumnIndex].items = originItems;
-
                 //set 'enter' to prevent repeating this process many times
                 //only repeat when the column of the origin item changes
+                columns[originColumnIndex].items = originItems;
                 setColumns(columns);
                 setEnter(true);
             }
@@ -144,9 +132,8 @@ export const Board = () => {
         const moveItemToDifferentColumn = (originColumnId, destinationColumnId) => {
             //get the index of the origin column
             const originColumnIndex = columns.findIndex(column => column.id === originColumnId);
-            //get the index of the destination column
             const destinationColumnIndex = columns.findIndex(column => column.id === destinationColumnId);
-
+            //get the index of the destination column
             if (originColumnIndex !== -1 && destinationColumnIndex !== -1) {
                 //remove item from the origin column
                 const originItems = [...columns[originColumnIndex].items];
@@ -157,9 +144,10 @@ export const Board = () => {
                     originItems.splice(itemIndex, 1);
                 }
 
-                //add item to the destination column
+                ///add item to the destination column
                 let destinationItems = [];
                 destinationItems = [...columns[destinationColumnIndex].items, itemToMove];
+                
 
                 //update columns state
                 const updatedColumns = columns.map((column, index) => {
@@ -175,6 +163,7 @@ export const Board = () => {
                 //when set to true, the item is now in the new column
                 setEnter(true);
             }
+
         };
 
         //in cases where the destinationColumnId is undefined, this means the item
@@ -182,7 +171,7 @@ export const Board = () => {
         if (originColumnId !== destinationColumnId && destinationColumnId !== undefined) {
             if (enter) {
                 //set 'enter' to prevent repeating this process many times
-                //onnly repeat when the column of the origin item changes
+                //only repeat when the column of the origin item changes
                 setEnter(false);
             } else {
                 moveItemToDifferentColumn(originColumnId, destinationColumnId);
@@ -195,11 +184,10 @@ export const Board = () => {
 
     return (
         <div >
-            <DndContext collisionDetection={closestCenter} sensors={sensors} onDragMove={handleDragMove} onDragStart={onDragStartFuntion} onDragEnd={handleDragEnd} onDragOver={onOver}>
+            <DndContext collisionDetection={closestCenter} sensors={sensors} onDragMove={handleDragMove} onDragStart={onDragStartFuntion} onDragEnd={handleDragEnd} >
                 {
 
                     <div className="boardCss">
-
 
 
                         {
