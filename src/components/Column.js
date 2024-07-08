@@ -48,10 +48,10 @@ export const Column = ({ item, columId }) => {
     }*/
 
     return (
-        <div >
+        <div>
             {
-                <div ref={setNodeRefD} style={styleD} {...attributesD} {...listenersD} className="dragg">
-                <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="itemHight">
+                <div ref={setNodeRefD} style={styleD} {...attributesD} {...listenersD} className="rounded-1xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
+                <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
                     
                         <h2>{item.description}</h2>
                         <div >
