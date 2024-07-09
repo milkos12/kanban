@@ -3,8 +3,10 @@ import { useSortable } from "@dnd-kit/sortable";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import "./Board.css";
+import { ButtonDelete } from './ButtonDelete'
 
-export const Column = ({ item, columId }) => {
+
+export const Column = ({ item, columId, dispatch }) => {
 
     const {
         attributes,
@@ -32,20 +34,6 @@ export const Column = ({ item, columId }) => {
         transform: CSS.Transform.toString(transformD),
     };
 
-    //show elemen dragg direfferent
-    /*if(isDragging) {
-        return(<div >
-            {
-                <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="itemHight">
-                    <h2>grad elemnt</h2>
-                    <div>
-                        <p>grad elemnt</p>
-                    </div>
-                </div>
-
-            }
-        </div>)
-    }*/
 
     return (
         <div>
@@ -58,10 +46,11 @@ export const Column = ({ item, columId }) => {
                             <p>content </p>
                         </div>
                     </div>
-
+                   
                 </div>
-
+                
             }
+             <ButtonDelete dispatch={dispatch} columId={columId} idItem={item.id}/>
         </div>
 
 
