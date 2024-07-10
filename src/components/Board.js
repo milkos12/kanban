@@ -20,7 +20,7 @@ export const Board = () => {
         })
     );
 
-    console.log("Reenderizado ->")
+   
     //this function change the state column from app an put
     //the new postion for the item dragged
     function handleDragEnd(event) {
