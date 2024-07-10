@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import { useKanban } from '../context/KanbanContext';
 import { Column } from './Column'
 import { PutDroppoble } from './DroppobleColumn'
@@ -8,8 +8,9 @@ import { PointerSensor } from '@dnd-kit/core';
 import './Board.css'
 
 
+
 export const Board = () => {
-    const { columns, setColumns } = useKanban();
+    const { columns, setColumns, dispatch } = useKanban();
     const [itemActive, setItemActive] = useState(null);
     const [enter, setEnter] = useState(false);
     const sensors = useSensors(
@@ -19,8 +20,7 @@ export const Board = () => {
         })
     );
 
-
-
+   
     //this function change the state column from app an put
     //the new postion for the item dragged
     function handleDragEnd(event) {
@@ -147,7 +147,7 @@ export const Board = () => {
                 ///add item to the destination column
                 let destinationItems = [];
                 destinationItems = [...columns[destinationColumnIndex].items, itemToMove];
-                
+
 
                 //update columns state
                 const updatedColumns = columns.map((column, index) => {
@@ -200,7 +200,7 @@ export const Board = () => {
 
                                             column.items.map(item => {
 
-                                                return <Column item={item} key={item.id} id={item.id} columId={column.id} />
+                                                return <Column item={item} key={item.id} id={item.id} columId={column.id} dispatch={dispatch}/>
 
                                             })
 
