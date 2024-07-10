@@ -1,9 +1,10 @@
 
 import { type } from "@testing-library/user-event/dist/type";
 import React from "react";
+import { useKanban } from '../context/KanbanContext';
 
-export const ButtonDelete = ({idItem, columId, dispatch}) => {
-
+export const ButtonDelete = ({idItem, columId}) => {
+    const { dispatch } = useKanban()
     const handleSubmit = (event) => {
         event.preventDefault();
     }   
